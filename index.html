@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mat Planeraren</title>
+    <title>Matplaneraren</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
+<body class="backgroundImage">
     <main>
         <div class="searchDiv">
             <div class="searchInputs">
@@ -20,12 +20,25 @@
             <input class="addButton" type="button" id="addButton" value="Lägg till" onclick="addFoodCard()">
         </div>
 
+        <div class="quickAdd-container">
+            <h2>Lägg till snabbt</h2>
+            <div class="quickAdd-buttons">
+                <button class="buttonStyle">Potatis</button>
+                <button class="buttonStyle">Pasta</button>
+                <button class="buttonStyle">Ris</button>
+            </div>
+
+        </div>
+
 
         <div class="food-container" id="foodContainer">
 
-            <!--
-            <div class="food-card" data-food-id="6">
-                <h2>Matfettsblandning fett 60% berikad typ Bregott mellan</h2>
+
+<!--                         <div class="food-card" data-food-id="6">
+                <button class="minimizeButton" onclick="minimizeCard('6')">Minimera</button>
+                <h2>Matfettsblandning fett 60% berikad typ Bregott mellan</h2> 
+               
+                
                 <div class="grams-container"><span class="variantText">Mängd Gram:</span><span
                         class="grams">0</span><span>g</span></div><input type="range" class="slider" min="0" max="1000"
                     step="2" value="0" oninput="updateNutrision('6')">
@@ -42,8 +55,8 @@
                     <div class="variant-container"><span class="variantText">Protein (g): </span> <span
                             class="protien">0</span> <span> g</span></div>
                 </div><input type="button" value="Ta bort" class="removeButton" onclick="removeCard('6')">
-            </div> 
-            -->
+            </div> -->
+
 
         </div>
 
@@ -52,12 +65,16 @@
             <div class="calculation">
                 <div class="variant-container"><span class="variantText">Energi (Kcal): </span> <span
                         class="kcal">0</span> <span> Kcal</span></div>
+
                 <div class="variant-container"><span class="variantText">Kolhydrater (g): </span> <span
                         class="carbs">0</span> <span> g</span></div>
+
                 <div class="variant-container"><span class="variantText">Fett, totalt (g): </span> <span
                         class="fat">0</span> <span> g</span></div>
+
                 <div class="variant-container"><span class="variantText">Fibrer (g): </span> <span
                         class="fibers">0</span> <span> g</span></div>
+
                 <div class="variant-container"><span class="variantText">Protein (g): </span> <span
                         class="protien">0</span> <span> g</span></div>
             </div>

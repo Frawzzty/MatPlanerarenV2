@@ -6,45 +6,6 @@
  }
 
 
- .myColorsss {
-     background-color: #6e4853;
-     background-color: #d8c1ba;
-     background-color: #adb7a7;
-     background-color: #a9a1bd;
-     background-color: #d5a66b;
- }
-
- .myColorsss2 {
-     background-color: #417e9e;
-     background-color: #6798b1;
-     background-color: #8db2c5;
-     background-color: #b3cbd8;
-     background-color: #d9e5ec;
- }
-
- .myColorsss {
-     /* Powder Blush */
-     --c1: #fec5bb;
-     /* Almond Silk */
-     --c2: #fcd5ce;
-     /* Soft Blush */
-     --c3: #fae1dd;
-     /* Seashell */
-     --c4: #f8edeb;
-     /* Alabaster Grey */
-     --c5: #e8e8e4;
-     /* Alabaster Grey 2 */
-     --c6: #d8e2dc;
-     /* Soft Linen */
-     --c7: #ece4db;
-     /* Powder Petal */
-     --c8: #ffe5d9;
-     /* Peach Fuzz */
-     --c9: #ffd7ba;
-     /* Peach Glow */
-     --c10: #fec89a;
- }
-
 
  body {
      background-color: #98b0d2;
@@ -53,13 +14,26 @@
 
      display: flex;
      justify-content: center;
-     align-items: center;
+
+     min-height: 100vh;
+     margin: 0;
  }
 
  main {
      margin: 1rem 1rem;
      min-width: 60%;
+     margin-bottom: 2rem;
  }
+
+ .backgroundImage {
+     min-height: 100vh;
+     background-image: url('../images/lightblue.jpg');
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+ }
+
 
  .searchDiv {
      margin-top: 2rem;
@@ -96,9 +70,11 @@
      border-radius: 5px;
  }
 
-  .foodDropDown:hover{
-    cursor: pointer;
-  }
+ .foodDropDown:hover {
+     cursor: pointer;
+ }
+
+ .foodDropDown option {}
 
  .addButton {
      flex: 1;
@@ -127,7 +103,7 @@
 
 
  .food-container {
-     margin-top: 2rem;
+     /* margin-top: 2rem; */
      display: flex;
      flex-direction: column;
      gap: 1rem;
@@ -254,6 +230,9 @@
      background-color: hsl(222, 30%, 44%);
      color: white;
      box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.506);
+
+     margin-top: 5rem;
+
  }
 
  .totals-container h3 {
@@ -283,4 +262,75 @@
      .searchDiv {
          flex-direction: column
      }
+ }
+
+ .hidden {
+     display: none;
+ }
+
+
+
+ .minimizeButton {
+     margin-top: 0.5rem;
+     padding: 0.3rem;
+     float: right;
+     border-radius: 3px;
+     color: white;
+     border: 1px solid #7589a9;
+     background-color: #687ea2;
+     transition: background-color 0.1s ease;
+
+ }
+
+ .minimizeButton:hover {
+     background-color: #586a88;
+ }
+
+ .minimizeButton:active {
+     background-color: #809ac4;
+     cursor: pointer;
+ }
+
+
+
+ .quickAdd-container {
+     border: 1px solid #414e69;
+     background-color: #5b6e8f;
+     box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.506);
+     border-radius: 5px;
+     color: white;
+     padding: 1rem;
+     margin-top: 1rem;
+     margin-bottom: 5rem;
+
+     gap: 1rem;
+ }
+
+ .quickAdd-buttons {
+    display: flex;
+    margin-top: 0.4rem;
+    gap: 1rem;
+ }
+
+ .quickAdd-buttons button {
+     min-width: 5rem;
+ }
+
+ .buttonStyle {
+     padding: 0.3rem;
+     border-radius: 3px;
+     color: white;
+     border: 1px solid #7589a9;
+     background-color: #687ea2;
+     transition: background-color 0.1s ease;
+
+ }
+
+ .buttonStyle:hover {
+     background-color: #586a88;
+ }
+
+ .buttonStyle:active {
+     background-color: #809ac4;
+     cursor: pointer;
  }

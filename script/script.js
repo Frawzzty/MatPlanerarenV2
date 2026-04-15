@@ -2,7 +2,7 @@
 /* VARIABLES */
 let runApi = true;
 let foodApiOffset = 0
-let foodApiLimit = 201;
+let foodApiLimit = 202;
 
 let allFoodItems = [] //All food from API
 let selectedFoodItems = [] //User selected Items from above
@@ -27,6 +27,8 @@ const foodCardContainer = document.getElementById('foodContainer')
 /* RUN ONCE */
 /* RUN ONCE */
 getFood()
+
+
 
 
 
@@ -170,9 +172,11 @@ function getFoodCard(foodId) {
     let card = document.querySelector('[data-food-id="' + foodId + '"]');
 
     let foodCard = {
+        minimizeButton: card.querySelector('.minimizeButton'),
         foodName: card.querySelector('.foodName'),
         slider: card.querySelector('.slider'),
         grams: card.querySelector('.grams'),
+        calculationDiv: card.querySelector('.calculation'),
         kcal: card.querySelector('.kcal'),
         carbs: card.querySelector('.carbs'),
         fat: card.querySelector('.fat'),
@@ -195,7 +199,14 @@ function buildFoodCard(foodId, foodName) {
     //Name
     let name = document.createElement('h2')
     name.textContent = foodName
+    let minimizeButton = document.createElement("button")
+    minimizeButton.setAttribute("onClick","minimizeCard('"+foodId+"')" )
+    minimizeButton.classList.add("minimizeButton")
+    minimizeButton.textContent = "Visa mindre"
+    
+    foodCard.appendChild(minimizeButton)
     foodCard.appendChild(name)
+    
     //-----------------
 
     //input div
@@ -296,9 +307,11 @@ function updateDropdownItems(allFoodItemsArray) {
     });
 
     if (allFoodItemsArray.length > max)
-        html += "<option value=''>" + (allFoodItemsArray.length - max) + " st gömda. Skriv in filter för att se mer" + "</option>"
+        html += "<option value='' disabled>" + (allFoodItemsArray.length - max) + " st gömda. Skriv in filter för att se mer" + "</option>"
 
     dropdown.innerHTML = html
+
+
 }
 
 function filterDropdown() {
@@ -311,8 +324,76 @@ function filterDropdown() {
         }
     });
 
+    let wordsSorted = rankWordsORIGINAL(allFoodItems.map(item => item.foodName), filterInput.value)
+    console.log(wordsSorted)
     updateDropdownItems(matchingFoodItems)
+
 }
+
+//SEARCH ALGO
+
+let testItems = [
+    { foodId: 1, foodName: "apple" },
+    { foodId: 2, foodName: "pineapple" },
+    { foodId: 3, foodName: "applepie" },
+    { foodId: 4, foodName: "banana" },
+    { foodId: 5, foodName: "bananabread" },
+    { foodId: 6, foodName: "carrot" },
+    { foodId: 7, foodName: "carrotcake" },
+    { foodId: 8, foodName: "dragonfruit" },
+    { foodId: 9, foodName: "fruitmix" },
+    { foodId: 10, foodName: "eggplant" },
+    { foodId: 11, foodName: "friedegg" },
+    { foodId: 12, foodName: "fig" },
+    { foodId: 13, foodName: "grape" },
+    { foodId: 14, foodName: "grapefruit" },
+    { foodId: 15, foodName: "grapesalad" },
+    { foodId: 16, foodName: "honey" },
+    { foodId: 17, foodName: "honeydew" },
+    { foodId: 18, foodName: "kiwi" },
+    { foodId: 19, foodName: "lemon" },
+    { foodId: 20, foodName: "lemonade" }
+];
+
+function rankWordsORIGINAL(words, query) {
+    query = query.toLowerCase();
+
+    return words
+        .map(word => {
+            const w = word.toLowerCase();
+            let score = 0;
+
+            if (w === query) score += 100;
+            if (w.startsWith(query)) score += 50;
+            if (w.includes(query)) score += 20
+
+            return { word, score };
+        })
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.word);
+}
+
+function rankWordsCustom(foodItems, query) {
+
+    query = query.toLowerCase();
+
+    return words
+        .map(word => {
+            const w = word.toLowerCase();
+            let score = 0;
+
+            if (w === query) score += 100;
+            if (w.startsWith(query)) score += 50;
+            if (w.includes(query)) score += 20
+
+            return { word, score };
+        })
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.word);
+
+}
+
+console.log(rankWordsCustom(testItems, "apple"))
 
 
 function updateTotal(selectedFoodItems) {
@@ -348,3 +429,18 @@ function updateTotal(selectedFoodItems) {
 
 
 
+function minimizeCard(foodId) {
+    let foodCard = getFoodCard(foodId)
+
+    if (foodCard.calculationDiv.classList.contains('hidden')) {
+        foodCard.calculationDiv.classList.remove("hidden")
+        foodCard.minimizeButton.textContent = "Visa mindre"
+        
+    }
+    else {
+        foodCard.calculationDiv.classList.add("hidden")
+        foodCard.minimizeButton.textContent = "Visa mer"
+    }
+
+
+}
