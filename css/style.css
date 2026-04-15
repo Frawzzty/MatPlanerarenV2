@@ -63,7 +63,8 @@
 
  .searchDiv {
      margin-top: 2rem;
-     border: 1px solid #282d36;
+     border: 1px solid #414e69;
+
      background-color: #5b6e8f;
      box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.506);
      padding: 2rem 1rem;
@@ -95,6 +96,10 @@
      border-radius: 5px;
  }
 
+  .foodDropDown:hover{
+    cursor: pointer;
+  }
+
  .addButton {
      flex: 1;
 
@@ -103,6 +108,8 @@
      border: 1px solid #7589a9;
      background-color: #687ea2;
      min-height: 2rem;
+
+     transition: background-color 0.1s ease;
  }
 
  .addButton:hover {
@@ -111,6 +118,7 @@
 
  .addButton:active {
      background-color: #809ac4;
+     cursor: pointer;
  }
 
 
@@ -127,15 +135,45 @@
 
 
  .slider {
+     -webkit-appearance: none;
+     appearance: none;
+
      width: 100%;
+     height: 15px;
+
+     background: #d3d3d3;
+     outline: none;
+     opacity: 0.7;
+     -webkit-transition: .2s;
+     transition: opacity .2s;
+
+     border-radius: 3px;
  }
+
+ .slider:hover {
+     opacity: 1;
+ }
+
+ .slider::-webkit-slider-thumb {
+     /* Override default look */
+     -webkit-appearance: none;
+     appearance: none;
+     cursor: pointer;
+
+     width: 15px;
+     height: 15px;
+
+     background: #33355f;
+     border-radius: 2px;
+ }
+
 
  .food-card {
      color: white;
 
      padding: 1rem;
      border-radius: 5px;
-     border: 1px solid #282d36;
+     border: 1px solid #414e69;
      background-color: #5b6e8f;
 
      box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.506);
@@ -195,6 +233,7 @@
      width: 100%;
      border: 1px solid #7589a9;
      background-color: #687ea2;
+     transition: background-color 0.1s ease;
  }
 
  .removeButton:hover {
@@ -203,6 +242,7 @@
 
  .removeButton:active {
      background-color: #809ac4;
+     cursor: pointer;
  }
 
 
@@ -210,7 +250,7 @@
      margin-top: 2rem;
      border-radius: 5px;
      padding: 1rem;
-     border: 1px solid hsl(224, 30%, 25%);
+     border: 1px solid hsl(224, 29%, 36%);
      background-color: hsl(222, 30%, 44%);
      color: white;
      box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.506);

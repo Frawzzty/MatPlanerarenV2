@@ -2,7 +2,7 @@ let runApi = true;
 let foodApiOffset = 0
 let foodApiLimit = 10;
 
-let allFoodItems = [{ foodId: 55, foodName: "Göstas äckelpeckel" }]
+let allFoodItems = [{ foodId: 8, foodName: "Test" }]
 let selectedFoodItems = []
 let nutritionData = []
 
@@ -20,7 +20,7 @@ const foodCardContainer = document.getElementById('foodContainer')
 
 
 getFood()
-updateDropdownItems(allFoodItems);
+//updateDropdownItems(allFoodItems);
 
 function addFoodCard() {
     if (dropdown.value == null || dropdown.value == "")
@@ -72,7 +72,6 @@ function getFood() {
                 }
             )
             .then(function () {
-                localStorage.setItem('foodItems', JSON.stringify(allFoodItems))
                 updateDropdownItems(allFoodItems)
             })
     }
@@ -80,10 +79,6 @@ function getFood() {
         allFoodItems = JSON.parse(localStorage.getItem("foodItems"));
         console.log("runApi is set to FALSE")
     }
-
-    console.log("allFoodItems")
-    console.log(allFoodItems)
-
 }
 
 function getNutrition(foodId) {
@@ -146,7 +141,7 @@ function getSelectedGrams(foodId) {
 
 
 
-function updateNutrision(foodId) {
+/* function updateNutrisionOLD(foodId) {
     let card = document.querySelector('[data-food-id="' + foodId + '"]');
 
     let slider = card.querySelector('.slider');
@@ -172,6 +167,32 @@ function updateNutrision(foodId) {
         fat.textContent = Math.round(((itemNutritionData.nutritionData.fatValue / 100) * sliderValue))
         fibers.textContent = Math.round(((itemNutritionData.nutritionData.fiberValue / 100) * sliderValue))
         protien.textContent = Math.round(((itemNutritionData.nutritionData.proteinValue / 100) * sliderValue))
+
+        updateTotal(selectedFoodItems)
+    }
+    catch {
+        console.log("Error when updating things")
+    }
+
+    //console.log(slider.value)
+
+} */
+
+function updateNutrision(foodId) {
+    let card = getFoodCard(foodId)
+
+    try {
+        let itemNutritionData;
+        itemNutritionData = nutritionData.find(item => item.foodId == foodId)
+
+        let sliderValue = parseInt(card.slider.value)
+        card.grams.textContent = sliderValue
+
+        card.kcal.textContent =     Math.round(((itemNutritionData.nutritionData.kcalValue / 100) * sliderValue))
+        card.carbs.textContent =    Math.round( ((itemNutritionData.nutritionData.carbsValue / 100) * sliderValue))
+        card.fat.textContent =      Math.round(((itemNutritionData.nutritionData.fatValue / 100) * sliderValue))
+        card.fibers.textContent =   Math.round(((itemNutritionData.nutritionData.fiberValue / 100) * sliderValue))
+        card.protien.textContent =  Math.round(((itemNutritionData.nutritionData.proteinValue / 100) * sliderValue))
 
         updateTotal(selectedFoodItems)
     }
@@ -211,17 +232,6 @@ function getFoodCard(foodId) {
 
     return foodCard;
 }
-
-let _foodCardTemplate = {
-    foodName: null,
-    slider: null,
-    grams: null,
-    kcal: null,
-    fat: null,
-    fibers: null,
-    protien: null,
-}
-
 
 
 
@@ -322,7 +332,14 @@ function removeCard(foodId) {
 
 
 function updateDropdownItems(allFoodItemsArray) {
-    dropdown.innerHTML = "<option value=''></option>" //Add empty row
+
+    if(filterInput.value == ""){
+        dropdown.innerHTML = "" //Add empty row
+        return;
+    }
+        
+    dropdown.innerHTML = "" //Add empty row
+    
 
     allFoodItemsArray.forEach(item => {
         dropdown.innerHTML += "<option value='" + item.foodId + "'>" + item.foodName + "</option>"
