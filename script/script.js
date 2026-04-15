@@ -1,10 +1,12 @@
+/* VARIABLES */
+/* VARIABLES */
 let runApi = true;
 let foodApiOffset = 0
-let foodApiLimit = 10;
+let foodApiLimit = 201;
 
-let allFoodItems = [{ foodId: 8, foodName: "Test" }]
-let selectedFoodItems = []
-let nutritionData = []
+let allFoodItems = [] //All food from API
+let selectedFoodItems = [] //User selected Items from above
+let selectedItemsNutritionData = [] //Selected items nutrion data
 
 /*  EXEMEEL FoodItem
     {
@@ -13,42 +15,56 @@ let nutritionData = []
     },
 */
 
+
+/* ELEMENTS */
+/* ELEMENTS */
 const filterInput = document.getElementById('searchFilter')
 const dropdown = document.getElementById('allFoodItemsDropDown')
 const addButton = document.getElementById('addButton')
 const foodCardContainer = document.getElementById('foodContainer')
 
 
+/* RUN ONCE */
+/* RUN ONCE */
 getFood()
-//updateDropdownItems(allFoodItems);
 
+
+
+/* FUNCTIONS */
+/* FUNCTIONS */
 function addFoodCard() {
+    //Return if choice is invalid
     if (dropdown.value == null || dropdown.value == "")
         return
 
+    //Get selected dropdown item values
     foodId = dropdown.value;
     foodName = dropdown.options[dropdown.selectedIndex].text
 
+    //Return if choice is already added
     if (selectedFoodItems.find(item => item.foodId == foodId) != null) {
         alert(foodName + " är redan tillagt")
         dropdown.selectedIndex = 0 //reset dropdown
         return;
     }
 
-    console.log("foodId: " + dropdown.value)
-    console.log("foodName: " + dropdown.options[dropdown.selectedIndex].text)
-
+    //Add to selected items
     selectedFoodItems.push({
         foodId: foodId,
         foodName: foodName,
     })
 
+    //Get nutrion data to nutrition array
     getNutrition(foodId)
-    buildFoodCard(selectedFoodItems[selectedFoodItems.length - 1].foodId, selectedFoodItems[selectedFoodItems.length - 1].foodName)
-
-    dropdown.selectedIndex = 0 //reset dropdown
+    //Display the food card
+    let selectedItem = selectedFoodItems[selectedFoodItems.length - 1];
+    buildFoodCard(selectedItem.foodId, selectedItem.foodName)
+    //reset dropdown
+    dropdown.selectedIndex = 0
 }
 
+
+/* API */
 function getFood() {
     let _urlApiFood = "https://dataportal.livsmedelsverket.se/livsmedel/api/v1/livsmedel?offset=" + foodApiOffset + "&limit=" + foodApiLimit + "&sprak=1"
 
@@ -76,11 +92,13 @@ function getFood() {
             })
     }
     else {
-        allFoodItems = JSON.parse(localStorage.getItem("foodItems"));
+        /* allFoodItems = JSON.parse(localStorage.getItem("foodItems")); */
         console.log("runApi is set to FALSE")
     }
 }
 
+
+/* API */
 function getNutrition(foodId) {
     let _urlApNutrition = "https://dataportal.livsmedelsverket.se/livsmedel/api/v1/livsmedel/" + foodId + "/naringsvarden?sprak=1"
 
@@ -93,7 +111,7 @@ function getNutrition(foodId) {
             )
             .then(
                 function (data) {
-                    nutritionData.push({
+                    selectedItemsNutritionData.push({
                         foodId: foodId,
                         nutritionData: {
                             kcalValue: getNutritionValueByName(data, "Energi (kcal)"), //Different method because it got the same code as Energy KJ
@@ -110,7 +128,7 @@ function getNutrition(foodId) {
         console.log("runApi is set to FALSE")
     }
 
-    console.log(nutritionData);
+    console.log(selectedItemsNutritionData);
 }
 
 function getNutritionValueByEuroFI(data, euroFIRkod) {
@@ -123,111 +141,43 @@ function getNutritionValueByName(data, name) {
     return item.varde
 }
 
-
-
-function getSelectedGrams(foodId) {
-    let sliderId = "gramSlider" + foodId
-
-    try {
-        let slider = document.getElementById(sliderId)
-        //console.log(slider.value)
-        return slider.value;
-    }
-    catch {
-        console.log("Could not find slider: " + sliderId)
-    }
-
-}
-
-
-
-/* function updateNutrisionOLD(foodId) {
-    let card = document.querySelector('[data-food-id="' + foodId + '"]');
-
-    let slider = card.querySelector('.slider');
-    let grams = card.querySelector('.grams');
-
-    let kcal = card.querySelector('.kcal');
-    let carbs = card.querySelector('.carbs');
-    let fat = card.querySelector('.fat');
-    let fibers = card.querySelector('.fibers');
-    let protien = card.querySelector('.protien');
-
-
-    try {
-        let itemNutritionData;
-        itemNutritionData = nutritionData.find(item => item.foodId == foodId)
-        console.log(itemNutritionData)
-
-        let sliderValue = parseInt(slider.value)
-        grams.textContent = sliderValue
-
-        kcal.textContent = Math.round(((itemNutritionData.nutritionData.kcalValue / 100) * sliderValue)) //
-        carbs.textContent = Math.round( ((itemNutritionData.nutritionData.carbsValue / 100) * sliderValue))
-        fat.textContent = Math.round(((itemNutritionData.nutritionData.fatValue / 100) * sliderValue))
-        fibers.textContent = Math.round(((itemNutritionData.nutritionData.fiberValue / 100) * sliderValue))
-        protien.textContent = Math.round(((itemNutritionData.nutritionData.proteinValue / 100) * sliderValue))
-
-        updateTotal(selectedFoodItems)
-    }
-    catch {
-        console.log("Error when updating things")
-    }
-
-    //console.log(slider.value)
-
-} */
-
 function updateNutrision(foodId) {
     let card = getFoodCard(foodId)
 
     try {
         let itemNutritionData;
-        itemNutritionData = nutritionData.find(item => item.foodId == foodId)
+        itemNutritionData = selectedItemsNutritionData.find(item => item.foodId == foodId)
 
         let sliderValue = parseInt(card.slider.value)
         card.grams.textContent = sliderValue
 
-        card.kcal.textContent =     Math.round(((itemNutritionData.nutritionData.kcalValue / 100) * sliderValue))
-        card.carbs.textContent =    Math.round( ((itemNutritionData.nutritionData.carbsValue / 100) * sliderValue))
-        card.fat.textContent =      Math.round(((itemNutritionData.nutritionData.fatValue / 100) * sliderValue))
-        card.fibers.textContent =   Math.round(((itemNutritionData.nutritionData.fiberValue / 100) * sliderValue))
-        card.protien.textContent =  Math.round(((itemNutritionData.nutritionData.proteinValue / 100) * sliderValue))
+        card.kcal.textContent = Math.round(((itemNutritionData.nutritionData.kcalValue / 100) * sliderValue))
+        card.carbs.textContent = Math.round(((itemNutritionData.nutritionData.carbsValue / 100) * sliderValue))
+        card.fat.textContent = Math.round(((itemNutritionData.nutritionData.fatValue / 100) * sliderValue))
+        card.fibers.textContent = Math.round(((itemNutritionData.nutritionData.fiberValue / 100) * sliderValue))
+        card.protien.textContent = Math.round(((itemNutritionData.nutritionData.proteinValue / 100) * sliderValue))
 
         updateTotal(selectedFoodItems)
     }
     catch {
-        console.log("Error when updating things")
+        console.log("Error when updating nutrition")
     }
 
-    //console.log(slider.value)
-
 }
-
 
 
 function getFoodCard(foodId) {
     let card = document.querySelector('[data-food-id="' + foodId + '"]');
 
-    let foodName = card.querySelector('.foodName');
-    let slider = card.querySelector('.slider');
-    let grams = card.querySelector('.grams');
-
-    let kcal = card.querySelector('.kcal');
-    let carbs = card.querySelector('.carbs');
-    let fat = card.querySelector('.fat');
-    let fibers = card.querySelector('.fibers');
-    let protien = card.querySelector('.protien');
-
     let foodCard = {
-        foodName: foodName,
-        slider: slider,
-        grams: grams,
-        kcal: kcal,
-        carbs: carbs,
-        fat: fat,
-        fibers: fibers,
-        protien: protien
+        foodName: card.querySelector('.foodName'),
+        slider: card.querySelector('.slider'),
+        grams: card.querySelector('.grams'),
+        kcal: card.querySelector('.kcal'),
+        carbs: card.querySelector('.carbs'),
+        fat: card.querySelector('.fat'),
+        fibers: card.querySelector('.fibers'),
+        protien: card.querySelector('.protien'),
     }
 
     return foodCard;
@@ -286,15 +236,14 @@ function buildFoodCard(foodId, foodName) {
     calulationText.textContent = "Uträkning"
     foodCard.appendChild(calulationText)
 
-
-
     let calculationDiv = document.createElement('div')
     calculationDiv.setAttribute("class", "calculation")
-    calculationDiv.innerHTML =  "<div class='variant-container'><span class='variantText'>Energi (Kcal): </span>       <span class='kcal'>0</span>     <span> Kcal</span></div>"
-    calculationDiv.innerHTML += "<div class='variant-container'><span class='variantText'>Kolhydrater (g): </span>     <span class='carbs'>0</span>    <span> g</span></div>"
-    calculationDiv.innerHTML += "<div class='variant-container'><span class='variantText'>Fett, totalt (g): </span>    <span class='fat'>0</span>      <span> g</span></div>"
-    calculationDiv.innerHTML += "<div class='variant-container'><span class='variantText'>Fibrer (g): </span>          <span class='fibers'>0</span>   <span> g</span></div>"
-    calculationDiv.innerHTML += "<div class='variant-container'><span class='variantText'>Protein (g): </span>         <span class='protien'>0</span>  <span> g</span></div>"
+
+    calculationDiv.innerHTML = getHtmlNutriotionRow("Energi (Kcal): ", "kcal", " Kcal", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Kolhydrater (g): ", "carbs", " g", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Fett, totalt (g): ", "fat", " g", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Fibrer (g): ", "fibers", " g", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Protein (g): ", "protien", " g", 0)
 
     foodCard.appendChild(calculationDiv)
     //-----------------
@@ -310,11 +259,11 @@ function buildFoodCard(foodId, foodName) {
 
     //Add to container
     foodCardContainer.appendChild(foodCard);
-
-
-
 }
 
+function getHtmlNutriotionRow(nutritionText, nutritionClass, unit, defaultValue) {
+    return "<div class='variant-container'><span class='variantText'>" + nutritionText + "</span><span class='" + nutritionClass + "'>" + defaultValue + "</span><span> " + unit + "</span></div>"
+}
 
 function removeCard(foodId) {
     //Remove UI element
@@ -333,29 +282,31 @@ function removeCard(foodId) {
 
 function updateDropdownItems(allFoodItemsArray) {
 
-    if(filterInput.value == ""){
-        dropdown.innerHTML = "" //Add empty row
-        return;
-    }
-        
-    dropdown.innerHTML = "" //Add empty row
-    
+    //Clear previous inputs
+    let html = "";
+    html += "<option value=''></option>"
 
-    allFoodItemsArray.forEach(item => {
-        dropdown.innerHTML += "<option value='" + item.foodId + "'>" + item.foodName + "</option>"
+    //If filter is empty limit to max to reduce lagg.
+    let index = 0;
+    let max = 200;
+    allFoodItemsArray.slice(0, max).forEach(item => {
+
+        html += "<option value='" + item.foodId + "'>" + item.foodName + "</option>"
+        index++;
     });
+
+    if (allFoodItemsArray.length > max)
+        html += "<option value=''>" + (allFoodItemsArray.length - max) + " st gömda. Skriv in filter för att se mer" + "</option>"
+
+    dropdown.innerHTML = html
 }
 
 function filterDropdown() {
-    /* dropdown */
-    /* filterInput */
-    let filterText = filterInput.value
-
     let matchingFoodItems = []
 
     allFoodItems.forEach(item => {
-        let result = item.foodName.toLowerCase().includes(filterText)
-        if(result == true){
+        let match = item.foodName.toLowerCase().includes(filterInput.value)
+        if (match == true) {
             matchingFoodItems.push(item)
         }
     });
@@ -364,10 +315,9 @@ function filterDropdown() {
 }
 
 
-function updateTotal(selectedFoodItems){
+function updateTotal(selectedFoodItems) {
 
     let myFoodIds = selectedFoodItems.map(item => item.foodId)
-    console.log("myFoodIds: " + myFoodIds)
 
     let totalKcal = 0;
     let totalcarbs = 0;
@@ -375,7 +325,7 @@ function updateTotal(selectedFoodItems){
     let totalfibers = 0;
     let totalprotien = 0;
 
-    //Getting DATA
+    //Get and sum each foodcards metrics
     myFoodIds.forEach(foodId => {
         let card = document.querySelector('[data-food-id="' + foodId + '"]');
 
@@ -389,21 +339,11 @@ function updateTotal(selectedFoodItems){
     //SETTING UI
     let totalsCard = document.querySelector('[data-totals="' + "totals" + '"]');
 
-    let foodName = totalsCard.querySelector('.foodName');
-    let slider = totalsCard.querySelector('.slider');
-    let grams = totalsCard.querySelector('.grams');
-
     totalsCard.querySelector('.kcal').textContent = totalKcal;
     totalsCard.querySelector('.carbs').textContent = totalcarbs;
     totalsCard.querySelector('.fat').textContent = totalfat;
     totalsCard.querySelector('.fibers').textContent = totalfibers;
     totalsCard.querySelector('.protien').textContent = totalprotien;
-    /* 
-    let carbs = totalsCard.querySelector('.carbs');
-    let fat = totalsCard.querySelector('.fat');
-    let fibers = totalsCard.querySelector('.fibers');
-    let protien = totalsCard.querySelector('.protien'); */
-
 }
 
 
