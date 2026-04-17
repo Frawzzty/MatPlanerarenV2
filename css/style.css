@@ -259,7 +259,7 @@
          min-width: 94%;
      }
 
-     .searchDiv {
+     .searchDiv,  .quickAdd-buttons {
          flex-direction: column
      }
  }

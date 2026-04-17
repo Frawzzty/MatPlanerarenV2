@@ -2,7 +2,7 @@
 /* VARIABLES */
 let runApi = true;
 let foodApiOffset = 0
-let foodApiLimit = 202;
+let foodApiLimit = 205;
 
 let allFoodItems = [] //All food from API
 let selectedFoodItems = [] //User selected Items from above
@@ -27,7 +27,6 @@ const foodCardContainer = document.getElementById('foodContainer')
 /* RUN ONCE */
 /* RUN ONCE */
 getFood()
-
 
 
 
@@ -390,7 +389,6 @@ function rankWordsCustom(foodItems, query) {
         })
         .sort((a, b) => b.score - a.score)
         .map(item => item.word);
-
 }
 
 console.log(rankWordsCustom(testItems, "apple"))
