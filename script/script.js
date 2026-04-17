@@ -2,11 +2,19 @@
 /* VARIABLES */
 let runApi = true;
 let foodApiOffset = 0
-let foodApiLimit = 205;
+let foodApiLimit = 100;
+
+//236 potatis //Färskpotatis kokt u. salt
 
 let allFoodItems = [] //All food from API
 let selectedFoodItems = [] //User selected Items from above
 let selectedItemsNutritionData = [] //Selected items nutrion data
+
+let quickAddOptions = [
+    { foodId: 5153, foodName: "Potatis kokt u. salt" },
+    { foodId: 2513, foodName: "Ris basmati kokt m. salt" },
+    { foodId: 846, foodName: "Pasta kokt u. salt" },
+]
 
 /*  EXEMEEL FoodItem
     {
@@ -22,25 +30,41 @@ const filterInput = document.getElementById('searchFilter')
 const dropdown = document.getElementById('allFoodItemsDropDown')
 const addButton = document.getElementById('addButton')
 const foodCardContainer = document.getElementById('foodContainer')
-
+const quickAddButtonsContainer = document.getElementById('quickAdd-buttons')
 
 /* RUN ONCE */
 /* RUN ONCE */
 getFood()
+buildQuickAddButtons()
 
+function buildQuickAddButtons() {
 
+    let html = ""
+    quickAddOptions.forEach(item => {
+        html += "<button class='buttonStyle' onclick=\"addFoodCard('" + item.foodId + "', '"  + item.foodName + "')\">" + item.foodName + "</button>";
+    });
+
+    quickAddButtonsContainer.innerHTML = html;
+}
 
 
 /* FUNCTIONS */
 /* FUNCTIONS */
-function addFoodCard() {
+function addFoodCard(foodId, foodName) { //FoodID is optional if empty picks from dropdown
     //Return if choice is invalid
-    if (dropdown.value == null || dropdown.value == "")
-        return
 
-    //Get selected dropdown item values
-    foodId = dropdown.value;
-    foodName = dropdown.options[dropdown.selectedIndex].text
+    if (foodId != null && foodName != null) {
+        console.log("HEELLLO")
+    }
+    else {
+        if (dropdown.value == null || dropdown.value == "")
+            return
+
+        //Get selected dropdown item values
+        foodId = dropdown.value;
+        foodName = dropdown.options[dropdown.selectedIndex].text
+
+    }
 
     //Return if choice is already added
     if (selectedFoodItems.find(item => item.foodId == foodId) != null) {
@@ -58,10 +82,12 @@ function addFoodCard() {
     //Get nutrion data to nutrition array
     getNutrition(foodId)
     //Display the food card
-    let selectedItem = selectedFoodItems[selectedFoodItems.length - 1];
-    buildFoodCard(selectedItem.foodId, selectedItem.foodName)
+    buildFoodCard(foodId, foodName)
     //reset dropdown
     dropdown.selectedIndex = 0
+
+
+
 }
 
 
@@ -199,13 +225,13 @@ function buildFoodCard(foodId, foodName) {
     let name = document.createElement('h2')
     name.textContent = foodName
     let minimizeButton = document.createElement("button")
-    minimizeButton.setAttribute("onClick","minimizeCard('"+foodId+"')" )
+    minimizeButton.setAttribute("onClick", "minimizeCard('" + foodId + "')")
     minimizeButton.classList.add("minimizeButton")
     minimizeButton.textContent = "Visa mindre"
-    
+
     foodCard.appendChild(minimizeButton)
     foodCard.appendChild(name)
-    
+
     //-----------------
 
     //input div
@@ -433,7 +459,7 @@ function minimizeCard(foodId) {
     if (foodCard.calculationDiv.classList.contains('hidden')) {
         foodCard.calculationDiv.classList.remove("hidden")
         foodCard.minimizeButton.textContent = "Visa mindre"
-        
+
     }
     else {
         foodCard.calculationDiv.classList.add("hidden")

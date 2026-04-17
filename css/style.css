@@ -253,16 +253,6 @@
 
  }
 
- @media (max-width: 740px) {
-     main {
-
-         min-width: 94%;
-     }
-
-     .searchDiv,  .quickAdd-buttons {
-         flex-direction: column
-     }
- }
 
  .hidden {
      display: none;
@@ -272,6 +262,7 @@
 
  .minimizeButton {
      margin-top: 0.5rem;
+     margin-left: 0.5rem;
      padding: 0.3rem;
      float: right;
      border-radius: 3px;
@@ -308,6 +299,7 @@
 
  .quickAdd-buttons {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 0.4rem;
     gap: 1rem;
  }
@@ -333,4 +325,16 @@
  .buttonStyle:active {
      background-color: #809ac4;
      cursor: pointer;
+ }
+
+
+  @media (max-width: 740px) {
+     main {
+
+         min-width: 94%;
+     }
+
+     .searchDiv{
+        flex-direction: column;
+     }
  }
