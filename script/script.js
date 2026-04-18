@@ -3,6 +3,7 @@
 let runApi = true;
 let foodApiOffset = 0
 let foodApiLimit = 100;
+let dropdownMax = 30
 
 //236 potatis //Färskpotatis kokt u. salt
 
@@ -272,33 +273,41 @@ function buildFoodCard(foodId, foodName) {
     calulationText.textContent = "Uträkning"
     foodCard.appendChild(calulationText)
 
-    let calculationDiv = document.createElement('div')
-    calculationDiv.setAttribute("class", "calculation")
-
-    calculationDiv.innerHTML = getHtmlNutriotionRow("Energi (Kcal): ", "kcal", " Kcal", 0)
-    calculationDiv.innerHTML += getHtmlNutriotionRow("Kolhydrater (g): ", "carbs", " g", 0)
-    calculationDiv.innerHTML += getHtmlNutriotionRow("Fett, totalt (g): ", "fat", " g", 0)
-    calculationDiv.innerHTML += getHtmlNutriotionRow("Fibrer (g): ", "fibers", " g", 0)
-    calculationDiv.innerHTML += getHtmlNutriotionRow("Protein (g): ", "protien", " g", 0)
-
+    let calculationDiv = createCalulationDiv()
     foodCard.appendChild(calculationDiv)
     //-----------------
 
     //Remove button
-    let removeButton = document.createElement("input")
-    removeButton.setAttribute("type", "button")
-    removeButton.setAttribute("value", "Ta bort")
-    removeButton.setAttribute("class", "removeButton")
-    removeButton.setAttribute("onclick", "removeCard('" + foodId + "')")
-
+    let removeButton = createRemoveButton (foodId)
     foodCard.appendChild(removeButton)
 
     //Add to container
     foodCardContainer.appendChild(foodCard);
 }
 
+function createCalulationDiv() {
+    let calculationDiv = document.createElement('div')
+    calculationDiv.setAttribute("class", "calculation")
+
+    calculationDiv.innerHTML =  getHtmlNutriotionRow("Energi (Kcal): ", "kcal", " Kcal", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Kolhydrater (g): ", "carbs", " g", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Fett, totalt (g): ", "fat", " g", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Fibrer (g): ", "fibers", " g", 0)
+    calculationDiv.innerHTML += getHtmlNutriotionRow("Protein (g): ", "protien", " g", 0)
+    return calculationDiv;
+}
+
 function getHtmlNutriotionRow(nutritionText, nutritionClass, unit, defaultValue) {
     return "<div class='variant-container'><span class='variantText'>" + nutritionText + "</span><span class='" + nutritionClass + "'>" + defaultValue + "</span><span> " + unit + "</span></div>"
+}
+
+function createRemoveButton (foodId) {
+    let removeButton = document.createElement("input")
+    removeButton.setAttribute("type", "button")
+    removeButton.setAttribute("value", "Ta bort")
+    removeButton.setAttribute("class", "removeButton")
+    removeButton.setAttribute("onclick", "removeCard('" + foodId + "')")
+    return removeButton;
 }
 
 function removeCard(foodId) {
@@ -324,15 +333,14 @@ function updateDropdownItems(allFoodItemsArray) {
 
     //If filter is empty limit to max to reduce lagg.
     let index = 0;
-    let max = 200;
-    allFoodItemsArray.slice(0, max).forEach(item => {
+    allFoodItemsArray.slice(0, dropdownMax).forEach(item => {
 
         html += "<option value='" + item.foodId + "'>" + item.foodName + "</option>"
         index++;
     });
 
-    if (allFoodItemsArray.length > max)
-        html += "<option value='' disabled>" + (allFoodItemsArray.length - max) + " st gömda. Skriv in filter för att se mer" + "</option>"
+    if (allFoodItemsArray.length > dropdownMax)
+        html += "<option value='' disabled>" + (allFoodItemsArray.length - dropdownMax) + " st gömda. Skriv in filter för att se mer" + "</option>"
 
     dropdown.innerHTML = html
 
