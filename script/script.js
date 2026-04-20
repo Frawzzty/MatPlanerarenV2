@@ -363,69 +363,6 @@ function filterDropdown() {
 
 }
 
-//SEARCH ALGO
-
-let testItems = [
-    { foodId: 1, foodName: "apple" },
-    { foodId: 2, foodName: "pineapple" },
-    { foodId: 3, foodName: "applepie" },
-    { foodId: 4, foodName: "banana" },
-    { foodId: 5, foodName: "bananabread" },
-    { foodId: 6, foodName: "carrot" },
-    { foodId: 7, foodName: "carrotcake" },
-    { foodId: 8, foodName: "dragonfruit" },
-    { foodId: 9, foodName: "fruitmix" },
-    { foodId: 10, foodName: "eggplant" },
-    { foodId: 11, foodName: "friedegg" },
-    { foodId: 12, foodName: "fig" },
-    { foodId: 13, foodName: "grape" },
-    { foodId: 14, foodName: "grapefruit" },
-    { foodId: 15, foodName: "grapesalad" },
-    { foodId: 16, foodName: "honey" },
-    { foodId: 17, foodName: "honeydew" },
-    { foodId: 18, foodName: "kiwi" },
-    { foodId: 19, foodName: "lemon" },
-    { foodId: 20, foodName: "lemonade" }
-];
-
-function rankWordsORIGINAL(words, query) {
-    query = query.toLowerCase();
-
-    return words
-        .map(word => {
-            const w = word.toLowerCase();
-            let score = 0;
-
-            if (w === query) score += 100;
-            if (w.startsWith(query)) score += 50;
-            if (w.includes(query)) score += 20
-
-            return { word, score };
-        })
-        .sort((a, b) => b.score - a.score)
-        .map(item => item.word);
-}
-
-function rankWordsCustom(foodItems, query) {
-
-    query = query.toLowerCase();
-
-    return words
-        .map(word => {
-            const w = word.toLowerCase();
-            let score = 0;
-
-            if (w === query) score += 100;
-            if (w.startsWith(query)) score += 50;
-            if (w.includes(query)) score += 20
-
-            return { word, score };
-        })
-        .sort((a, b) => b.score - a.score)
-        .map(item => item.word);
-}
-
-console.log(rankWordsCustom(testItems, "apple"))
 
 
 function updateTotal(selectedFoodItems) {
