@@ -2,7 +2,7 @@
 /* VARIABLES */
 let runApi = true;
 let foodApiOffset = 0
-let foodApiLimit = 100;
+let foodApiLimit = 2575;
 let dropdownMax = 30
 
 //236 potatis //Färskpotatis kokt u. salt
