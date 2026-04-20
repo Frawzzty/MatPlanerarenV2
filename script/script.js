@@ -351,16 +351,13 @@ function filterDropdown() {
     let matchingFoodItems = []
 
     allFoodItems.forEach(item => {
-        let match = item.foodName.toLowerCase().includes(filterInput.value)
+        let match = item.foodName.toLowerCase().includes(filterInput.value.toLowerCase())
         if (match == true) {
             matchingFoodItems.push(item)
         }
     });
 
-    let wordsSorted = rankWordsORIGINAL(allFoodItems.map(item => item.foodName), filterInput.value)
-    console.log(wordsSorted)
     updateDropdownItems(matchingFoodItems)
-
 }
 
 
